@@ -5,6 +5,8 @@ bower_components/
 www/
 plugins/
 platforms/
+cordova/platforms/
+cordova/plugins/
 dist/
 build/
 docs/
