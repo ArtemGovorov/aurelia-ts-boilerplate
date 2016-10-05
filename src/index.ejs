@@ -9,14 +9,22 @@
   <meta name="description" content="<%= htmlWebpackPlugin.options.description %>">
   <meta name="version" content="<%= htmlWebpackPlugin.options.version %>">
   <meta name="author" content="<%= htmlWebpackPlugin.options.author %>">
+
+  <% if (htmlWebpackPlugin.options.platform === 'mobile') { %>
+  <!-- Cordova -->
+  <script src="cordova.js"></script>
+  <% } %>
+  <% if (htmlWebpackPlugin.options.platform === 'web') { %>
   <base href="<%= htmlWebpackPlugin.options.baseUrl %>">
-  <!-- imported CSS are concatenated and added automatically -->
+  <% } %>
+
 </head>
 
 <body aurelia-app="main">
   <div class="splash">
     <div class="message">
-      <%= htmlWebpackPlugin.options.title %>
+      <!--<%= htmlWebpackPlugin.options.title %>-->
+      <%= htmlWebpackPlugin.options.platform %>
     </div>
 
     <div class="preloader-wrapper big active">
@@ -37,7 +45,7 @@
   <% if (htmlWebpackPlugin.options.ENV === 'development') { %>
     <!-- Webpack Dev Server reload -->
     <script src="/webpack-dev-server.js"></script>
-    <% } %>
+  <% } %>
 </body>
 
 </html>

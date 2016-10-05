@@ -2,17 +2,20 @@ import { inject } from 'aurelia-framework';
 import { Router, RouterConfiguration } from 'aurelia-router';
 import { I18N } from 'aurelia-i18n';
 
-@inject(I18N)
+@inject(I18N, 'AppConfig')
 export class App {
   private router: Router;
 
   constructor(
-    private i18n: I18N
+    private i18n: I18N,
+    private appConfig: AppConfig.IAppConfig
   ) { }
 
   public configureRouter(config: RouterConfiguration, router: Router): void {
     config.title = this.i18n.tr('SITE_TITLE');
-    config.options.pushState = true;
+    if (this.appConfig.TARGET === 'web') {
+      config.options.pushState = true;
+    }
     config.map([
       {
         route: ['', 'welcome'],

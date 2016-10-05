@@ -189,7 +189,7 @@ extra confuration to enable this.
 Initiate cordova with the following commands:
 ```shell
 npm install -g cordova
-npm run cordova:init
+npm run mobile:setup
 ```
 
 Finally add the following code just before the ```</body>``` closing tag:

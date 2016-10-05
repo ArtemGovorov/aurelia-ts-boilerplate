@@ -9,235 +9,268 @@ const easyWebpack = require('@easy-webpack/core');
 const generateConfig = easyWebpack.default;
 const get = easyWebpack.get;
 const path = require('path');
-const ENV = process.env.NODE_ENV && process.env.NODE_ENV.toLowerCase() || 'development';
-const pkg = require(path.join(process.cwd(), 'package.json'));
-
-/**
- * Other libraries
- */
+const chalk = require('chalk');
 const autoprefixer = require('autoprefixer');
 
-// basic configuration:
-const title = pkg.title;
-const baseUrl = '/';
-const rootDir = path.resolve();
-const srcDir = path.resolve('src/app');
-const outDir = path.resolve('dist');
-let config;
-
-const coreBundles = {
-  bootstrap: [
-    'aurelia-bootstrapper-webpack',
-    'aurelia-polyfills',
-    'aurelia-pal',
-    'aurelia-pal-browser',
-    'regenerator-runtime',
-    'intl'
-  ],
-  // these will be included in the 'aurelia' bundle (except for the above bootstrap packages)
-  aurelia: [
-    'aurelia-bootstrapper-webpack',
-    'aurelia-binding',
-    'aurelia-dependency-injection',
-    'aurelia-event-aggregator',
-    'aurelia-framework',
-    'aurelia-history',
-    'aurelia-history-browser',
-    'aurelia-loader',
-    'aurelia-loader-webpack',
-    'aurelia-logging',
-    'aurelia-logging-console',
-    'aurelia-metadata',
-    'aurelia-pal',
-    'aurelia-pal-browser',
-    'aurelia-path',
-    'aurelia-polyfills',
-    'aurelia-route-recognizer',
-    'aurelia-router',
-    'aurelia-task-queue',
-    'aurelia-templating',
-    'aurelia-templating-binding',
-    'aurelia-templating-router',
-    'aurelia-templating-resources'
-  ],
-  materialize: [
-    'materialize-css'
-  ]
-};
-
-const baseConfig = {
-  entry: {
-    'app': [/* this is filled by the aurelia-webpack-plugin */],
-    'materialize': coreBundles.materialize,
-    'aurelia-bootstrap': coreBundles.bootstrap,
-    'aurelia': coreBundles.aurelia.filter(pkg => coreBundles.bootstrap.indexOf(pkg) === -1),
-  },
-  output: {
-    path: outDir,
+module.exports = function (envArguments) {
+  /**
+   * Get project infos and run parameters
+   */
+  const pkg = require(path.join(process.cwd(), 'package.json'));
+  const ENV = process.env.NODE_ENV && process.env.NODE_ENV.toLowerCase() || 'development';
+  let PLATFORM = 'web';
+  let TARGET = 'development';
+  if (envArguments) {
+    PLATFORM = envArguments.platform || PLATFORM;
+    TARGET = envArguments.target || TARGET;
   }
-};
+  console.log('');
+  console.log(chalk.yellow('➜') + ' ' + chalk.white('ENV:      ') + chalk.green.bold(ENV));
+  console.log(chalk.yellow('➜') + ' ' + chalk.white('TARGET:   ') + chalk.green.bold(TARGET));
+  console.log(chalk.yellow('➜') + ' ' + chalk.white('PLATFORM: ') + chalk.green.bold(PLATFORM));
+  console.log('');
+  //-- -- --env.target development
+  //-- -- --env.platform mobile
 
-/**
- * Metadata
- */
-const metadata = {
-  title: pkg.title,
-  description: pkg.description,
-  version: pkg.version,
-  author: pkg.author,
-  baseUrl: baseUrl,
-  root: rootDir
-};
+  /**
+   * Basic configuration
+   */
+  const title = pkg.title;
+  const baseUrl = '/';
+  const rootDir = path.resolve();
+  const srcDir = path.resolve('src/app');
+  const outDir = path.resolve('dist');
+  let config;
 
-// advanced configuration:
-switch (ENV) {
-  case 'production':
-    let banner = {
-      title: pkg.title,
-      description: pkg.description,
-      version: pkg.version,
-      author: pkg.author,
-      license: pkg.license
+  const coreBundles = {
+    bootstrap: [
+      'aurelia-bootstrapper-webpack',
+      'aurelia-polyfills',
+      'aurelia-pal',
+      'aurelia-pal-browser',
+      'regenerator-runtime',
+      'intl'
+    ],
+    // these will be included in the 'aurelia' bundle (except for the above bootstrap packages)
+    aurelia: [
+      'aurelia-bootstrapper-webpack',
+      'aurelia-binding',
+      'aurelia-dependency-injection',
+      'aurelia-event-aggregator',
+      'aurelia-framework',
+      'aurelia-history',
+      'aurelia-history-browser',
+      'aurelia-loader',
+      'aurelia-loader-webpack',
+      'aurelia-logging',
+      'aurelia-logging-console',
+      'aurelia-metadata',
+      'aurelia-pal',
+      'aurelia-pal-browser',
+      'aurelia-path',
+      'aurelia-polyfills',
+      'aurelia-route-recognizer',
+      'aurelia-router',
+      'aurelia-task-queue',
+      'aurelia-templating',
+      'aurelia-templating-binding',
+      'aurelia-templating-router',
+      'aurelia-templating-resources'
+    ],
+    materialize: [
+      'materialize-css'
+    ]
+  };
+
+  const baseConfig = {
+    entry: {
+      'app': [/* this is filled by the aurelia-webpack-plugin */],
+      'materialize': coreBundles.materialize,
+      'aurelia-bootstrap': coreBundles.bootstrap,
+      'aurelia': coreBundles.aurelia.filter(pkg => coreBundles.bootstrap.indexOf(pkg) === -1),
+    },
+    output: {
+      path: outDir,
     }
+  };
 
-    config = generateConfig(
-      baseConfig,
+  /**
+   * Metadata
+   */
+  const metadata = {
+    title: pkg.title,
+    description: pkg.description,
+    version: pkg.version,
+    author: pkg.author,
+    baseUrl: baseUrl,
+    target: TARGET,
+    platform: PLATFORM,
+    root: rootDir
+  };
 
-      require('@easy-webpack/config-env-production')
-        ({ compress: true }),
+  /**
+   * Advanced configuration
+   */
+  switch (ENV) {
+    /**
+     * PRODUCTION
+     */
+    case 'production':
+      let banner = {
+        title: pkg.title,
+        description: pkg.description,
+        version: pkg.version,
+        author: pkg.author,
+        license: pkg.license
+      }
 
-      require('@easy-webpack/config-aurelia')
-        ({ root: rootDir, src: srcDir, title: title, baseUrl: baseUrl }),
+      config = generateConfig(
+        baseConfig,
 
-      require('@easy-webpack/config-typescript')(),
-      require('@easy-webpack/config-html')(),
+        require('@easy-webpack/config-env-production')
+          ({ compress: true }),
 
-      require('@easy-webpack/config-sass')
-        ({ allChunks: true, sourceMap: false }),
+        require('@easy-webpack/config-aurelia')
+          ({ root: rootDir, src: srcDir, title: title, baseUrl: baseUrl }),
 
-      require('./config/config-environment.js')
-        ({ env: ENV, name: pkg.name, version: pkg.version }),
+        require('@easy-webpack/config-typescript')(),
+        require('@easy-webpack/config-html')(),
 
-      require('./config/config-notifier.js')
-        (metadata.title, { contentImage: path.resolve('src/assets/images/favicon.ico') }),
+        require('@easy-webpack/config-sass')
+          ({ allChunks: true, sourceMap: false }),
 
-      require('./config/config-globals.js')(),
-      require('@easy-webpack/config-fonts-and-images')(),
-      require('@easy-webpack/config-global-jquery')(),
-      require('@easy-webpack/config-global-regenerator')(),
-      require('@easy-webpack/config-generate-index-html')
-        ({
-          minify: true, overrideOptions: Object.assign({
-            template: './src/index.ejs'
-          }, metadata)
-        }),
-      require('@easy-webpack/config-json')(),
+        require('./config/config-environment.js')
+          ({ target: TARGET, name: pkg.name, version: pkg.version, platform: PLATFORM }),
 
-      require('@easy-webpack/config-common-chunks-simple')
-        ({ appChunkName: 'app', firstChunk: 'aurelia-bootstrap' }),
+        require('./config/config-notifier.js')
+          (metadata.title, { contentImage: path.resolve('src/assets/images/favicon.ico') }),
 
-      require('./config/config-favicon.js')
-        (metadata.title,  path.resolve('src/assets/images/favicon.ico')),
+        require('./config/config-globals.js')(),
+        require('@easy-webpack/config-fonts-and-images')(),
+        require('@easy-webpack/config-global-jquery')(),
+        require('@easy-webpack/config-global-regenerator')(),
+        require('@easy-webpack/config-generate-index-html')
+          ({
+            minify: true, overrideOptions: Object.assign({
+              template: './src/index.ejs'
+            }, metadata)
+          }),
+        require('@easy-webpack/config-json')(),
 
-      require('@easy-webpack/config-uglify')
-        ({ exclude: [/materialize/i], mangle: { except: ['$super', '$', 'jQuery', 'exports', 'require', 'Aurelia', 'Materialize'] } }),
+        require('@easy-webpack/config-common-chunks-simple')
+          ({ appChunkName: 'app', firstChunk: 'aurelia-bootstrap' }),
 
-      require('./config/config-banner')(banner),
+        require('./config/config-favicon.js')
+          (metadata.title, path.resolve('src/assets/images/favicon.ico')),
 
-      require('./config/config-gzip')()
-    );
-    break;
+        require('@easy-webpack/config-uglify')
+          ({ exclude: [/materialize/i], mangle: { except: ['$super', '$', 'jQuery', 'exports', 'require', 'Aurelia', 'Materialize'] } }),
 
-  case 'test':
-    config = generateConfig(
-      baseConfig,
+        require('./config/config-banner')(banner),
 
-      require('@easy-webpack/config-env-development')
-        ({ devtool: 'inline-source-map' }),
+        require('./config/config-gzip')()
+      );
+      break;
 
-      require('@easy-webpack/config-aurelia')
-        ({ root: rootDir, src: srcDir, title: title, baseUrl: baseUrl }),
+    /**
+     * TEST
+     */
+    case 'test':
+      config = generateConfig(
+        baseConfig,
 
-      require('@easy-webpack/config-typescript')
-        ({ options: { doTypeCheck: false, compilerOptions: { sourceMap: false, inlineSourceMap: true } } }),
+        require('@easy-webpack/config-env-development')
+          ({ devtool: 'inline-source-map' }),
 
-      require('@easy-webpack/config-html')(),
+        require('@easy-webpack/config-aurelia')
+          ({ root: rootDir, src: srcDir, title: title, baseUrl: baseUrl }),
 
-      require('@easy-webpack/config-sass')
-        ({ allChunks: true, sourceMap: false }),
+        require('@easy-webpack/config-typescript')
+          ({ options: { doTypeCheck: false, compilerOptions: { sourceMap: false, inlineSourceMap: true } } }),
 
-      require('./config/config-environment.js')
-        ({ env: ENV, name: pkg.name, version: pkg.version }),
+        require('@easy-webpack/config-html')(),
 
-      require('./config/config-notifier.js')
-        (metadata.title, { contentImage: path.resolve('src/assets/images/favicon.ico') }),
+        require('@easy-webpack/config-sass')
+          ({ allChunks: true, sourceMap: false }),
 
-      require('@easy-webpack/config-fonts-and-images')(),
-      require('@easy-webpack/config-global-jquery')(),
-      require('@easy-webpack/config-global-regenerator')(),
-      require('@easy-webpack/config-generate-index-html')
-        ({
-          minify: true, overrideOptions: Object.assign({
-            template: './src/index.ejs'
-          }, metadata)
-        }),
+        require('./config/config-environment.js')
+          ({ target: TARGET, name: pkg.name, version: pkg.version, platform: PLATFORM }),
 
-      require('./config/config-favicon.js')
-        (metadata.title,  path.resolve('src/assets/images/favicon.ico'))//,
+        require('./config/config-notifier.js')
+          (metadata.title, { contentImage: path.resolve('src/assets/images/favicon.ico') }),
 
-      //require('@easy-webpack/config-test-coverage-istanbul')() // doesn't work currently with webpack 2'
-    );
-    break;
+        require('@easy-webpack/config-fonts-and-images')(),
+        require('@easy-webpack/config-global-jquery')(),
+        require('@easy-webpack/config-global-regenerator')(),
+        require('@easy-webpack/config-generate-index-html')
+          ({
+            minify: true, overrideOptions: Object.assign({
+              template: './src/index.ejs'
+            }, metadata)
+          }),
 
-  default:
-  case 'development':
-    process.env.NODE_ENV = 'development';
-    config = generateConfig(
-      baseConfig,
+        require('./config/config-favicon.js')
+          (metadata.title, path.resolve('src/assets/images/favicon.ico'))//,
 
-      require('@easy-webpack/config-env-development')(),
+        //require('@easy-webpack/config-test-coverage-istanbul')() // doesn't work currently with webpack 2'
+      );
+      break;
 
-      require('@easy-webpack/config-aurelia')
-        ({ root: rootDir, src: srcDir, title: title, baseUrl: baseUrl }),
+    /**
+     * DEVELOPMENT
+     */
+    default:
+    case 'development':
+      process.env.NODE_ENV = 'development';
+      config = generateConfig(
+        baseConfig,
 
-      require('@easy-webpack/config-tslint')(),
-      require('@easy-webpack/config-typescript')
-        ({ exclude: [/\.(spec|e2e|async)\.ts$/] }),
+        require('@easy-webpack/config-env-development')(),
 
-      require('@easy-webpack/config-html')(),
-      require('@easy-webpack/config-json')(),
+        require('@easy-webpack/config-aurelia')
+          ({ root: rootDir, src: srcDir, title: title, baseUrl: baseUrl }),
 
-      require('@easy-webpack/config-sass')
-        ({ allChunks: true, sourceMap: false }),
+        require('@easy-webpack/config-tslint')(),
+        require('@easy-webpack/config-typescript')
+          ({ exclude: [/\.(spec|e2e|async)\.ts$/] }),
 
-      require('./config/config-environment.js')
-        ({ env: ENV, name: pkg.name, version: pkg.version }),
+        require('@easy-webpack/config-html')(),
+        require('@easy-webpack/config-json')(),
 
-      require('./config/config-notifier.js')
-        (metadata.title, { contentImage: path.resolve('src/assets/images/favicon.ico') }),
+        require('@easy-webpack/config-sass')
+          ({ allChunks: true, sourceMap: false }),
 
-      require('./config/config-globals.js')(),
-      require('@easy-webpack/config-fonts-and-images')(),
-      require('@easy-webpack/config-global-jquery')(),
-      require('@easy-webpack/config-global-regenerator')(),
-      require('@easy-webpack/config-generate-index-html')
-        ({
-          minify: false, overrideOptions: Object.assign({
-            template: './src/index.ejs'
-          }, metadata)
-        }),
+        require('./config/config-environment.js')
+          ({ target: TARGET, name: pkg.name, version: pkg.version, platform: PLATFORM }),
 
-      require('./config/config-favicon.js')
-        (metadata.title,  path.resolve('src/assets/images/favicon.ico')),
+        require('./config/config-notifier.js')
+          (metadata.title, { contentImage: path.resolve('src/assets/images/favicon.ico') }),
 
-      require('@easy-webpack/config-common-chunks-simple')
-        ({ appChunkName: 'app', firstChunk: 'aurelia-bootstrap' }),
+        require('./config/config-globals.js')(),
+        require('@easy-webpack/config-fonts-and-images')(),
+        require('@easy-webpack/config-global-jquery')(),
+        require('@easy-webpack/config-global-regenerator')(),
+        require('@easy-webpack/config-generate-index-html')
+          ({
+            minify: false, overrideOptions: Object.assign({
+              template: './src/index.ejs'
+            }, metadata)
+          }),
 
-      require('./config/config-node.js')(),
+        require('./config/config-favicon.js')
+          (metadata.title, path.resolve('src/assets/images/favicon.ico')),
 
-      require('./config/config-dashboard.js')()
-    );
-    break;
-}
+        require('@easy-webpack/config-common-chunks-simple')
+          ({ appChunkName: 'app', firstChunk: 'aurelia-bootstrap' }),
 
-module.exports = config;
+        require('./config/config-node.js')(),
+
+        require('./config/config-dashboard.js')()
+      );
+      break;
+  }
+
+
+  return config;
+};
+
