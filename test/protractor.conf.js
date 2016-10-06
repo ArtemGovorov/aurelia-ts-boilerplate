@@ -7,16 +7,20 @@ exports.config = {
   ],
   exclude: [],
 
-  framework: 'jasmine',
+  framework: 'mocha',
 
   allScriptsTimeout: 110000,
 
-  jasmineNodeOpts: {
-    showTiming: true,
-    showColors: true,
-    isVerbose: true,
-    includeStackTrace: false,
-    defaultTimeoutInterval: 400000
+  // jasmineNodeOpts: {
+  //   showTiming: true,
+  //   showColors: true,
+  //   isVerbose: true,
+  //   includeStackTrace: false,
+  //   defaultTimeoutInterval: 400000
+  // },
+  mochaOpts: {
+    reporter: "spec",
+    slow: 3000
   },
   directConnect: true,
 
@@ -27,7 +31,7 @@ exports.config = {
     }
   },
 
-  onPrepare: function() {
+  onPrepare: function () {
     require('ts-node').register({ compilerOptions: { module: 'commonjs' }, disableWarnings: true, fast: true });
   },
 
