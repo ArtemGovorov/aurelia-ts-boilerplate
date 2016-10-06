@@ -3109,6 +3109,11 @@
       "from": "gulplog@>=1.0.0 <2.0.0",
       "resolved": "https://registry.npmjs.org/gulplog/-/gulplog-1.0.0.tgz"
     },
+    "hammer-timejs": {
+      "version": "1.1.0",
+      "from": "hammer-timejs@latest",
+      "resolved": "https://registry.npmjs.org/hammer-timejs/-/hammer-timejs-1.1.0.tgz"
+    },
     "hammerjs": {
       "version": "2.0.8",
       "from": "hammerjs@>=2.0.4 <3.0.0",
@@ -6545,6 +6550,18 @@
       "version": "2.0.0",
       "from": "yallist@>=2.0.0 <3.0.0",
       "resolved": "https://registry.npmjs.org/yallist/-/yallist-2.0.0.tgz"
+    },
+    "yargs": {
+      "version": "4.8.1",
+      "from": "yargs@>=4.7.1 <5.0.0",
+      "resolved": "https://registry.npmjs.org/yargs/-/yargs-4.8.1.tgz",
+      "dependencies": {
+        "lodash.assign": {
+          "version": "4.2.0",
+          "from": "lodash.assign@>=4.0.3 <5.0.0",
+          "resolved": "https://registry.npmjs.org/lodash.assign/-/lodash.assign-4.2.0.tgz"
+        }
+      }
     },
     "yargs-parser": {
       "version": "2.4.1",

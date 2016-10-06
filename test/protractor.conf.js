@@ -7,21 +7,18 @@ exports.config = {
   ],
   exclude: [],
 
-  framework: 'mocha',
+  framework: 'jasmine',
 
   allScriptsTimeout: 110000,
 
-  // jasmineNodeOpts: {
-  //   showTiming: true,
-  //   showColors: true,
-  //   isVerbose: true,
-  //   includeStackTrace: false,
-  //   defaultTimeoutInterval: 400000
-  // },
-  mochaOpts: {
-    reporter: "spec",
-    slow: 3000
+  jasmineNodeOpts: {
+    showTiming: true,
+    showColors: true,
+    isVerbose: true,
+    includeStackTrace: false,
+    defaultTimeoutInterval: 400000
   },
+
   directConnect: true,
 
   capabilities: {

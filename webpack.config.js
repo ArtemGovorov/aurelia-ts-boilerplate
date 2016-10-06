@@ -49,6 +49,7 @@ module.exports = function (envArguments) {
       'aurelia-pal',
       'aurelia-pal-browser',
       'regenerator-runtime',
+      'hammer-timejs',
       'intl'
     ],
     // these will be included in the 'aurelia' bundle (except for the above bootstrap packages)
