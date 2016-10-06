@@ -13,7 +13,7 @@ export class App {
 
   public configureRouter(config: RouterConfiguration, router: Router): void {
     config.title = this.i18n.tr('SITE_TITLE');
-    if (this.appConfig.TARGET === 'web') {
+    if (this.appConfig.PLATFORM === 'web') {
       config.options.pushState = true;
     }
     config.map([
