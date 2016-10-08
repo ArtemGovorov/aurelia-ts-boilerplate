@@ -110,7 +110,9 @@ module.exports = function (envArguments) {
   const configEnvironment = {
     target: TARGET,
     name: pkg.name,
-    version: pkg.version
+    version: pkg.version,
+    platform: PLATFORM,
+    env: TARGET
   };
 
   const configCommonChunks = {

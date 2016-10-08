@@ -19,7 +19,7 @@ function getDefinitions(options) {
     VERSION: JSON.stringify(options.version),
     PLATFORM: JSON.stringify(options.platform),
     ENV: JSON.stringify(options.env),
-    CONFIG: JSON.stringify(require(process.cwd() + `/environments/${env}.json`))
+    CONFIG: JSON.stringify(require(process.cwd() + `/environments/${options.env}.json`))
   };
 
 }
