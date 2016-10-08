@@ -14,13 +14,12 @@ const configEnv = function (options) {
 };
 
 function getDefinitions(options) {
-  const target = options.target;
   return {
     NAME: JSON.stringify(options.name),
     VERSION: JSON.stringify(options.version),
     PLATFORM: JSON.stringify(options.platform),
-    TARGET: JSON.stringify(options.target),
-    CONFIG: JSON.stringify(require(process.cwd() + `/environment/${target}.json`))
+    ENV: JSON.stringify(options.env),
+    CONFIG: JSON.stringify(require(process.cwd() + `/environments/${env}.json`))
   };
 
 }

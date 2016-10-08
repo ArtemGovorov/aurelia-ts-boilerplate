@@ -8,7 +8,7 @@ declare namespace AppConfig {
     NAME: string;
     VERSION: string;
     PLATFORM: string;
-    TARGET: string;
+    ENV: string;
     CONFIG: IAppConfigEnv;
   }
 }

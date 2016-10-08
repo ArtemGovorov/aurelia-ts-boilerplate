@@ -4,14 +4,14 @@
 declare var NAME: string;
 declare var VERSION: string;
 declare var PLATFORM: string;
-declare var TARGET: string;
+declare var ENV: string;
 declare var CONFIG: AppConfig.IAppConfigEnv;
 
 const AppConfig: AppConfig.IAppConfig = {
   NAME: NAME,
   VERSION: VERSION,
   PLATFORM: PLATFORM,
-  TARGET: TARGET,
+  ENV: ENV,
   CONFIG: CONFIG
 };
 

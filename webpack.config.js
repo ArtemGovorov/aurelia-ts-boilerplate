@@ -21,8 +21,8 @@ module.exports = function (envArguments) {
     TARGET = envArguments.target || TARGET;
   }
   console.log('');
-  console.log(chalk.yellow('➜') + ' ' + chalk.white('ENV:      ') + chalk.green.bold(ENV));
-  console.log(chalk.yellow('➜') + ' ' + chalk.white('TARGET:   ') + chalk.green.bold(TARGET));
+  console.log(chalk.yellow('➜') + ' ' + chalk.white('NODE_ENV: ') + chalk.green.bold(ENV));
+  console.log(chalk.yellow('➜') + ' ' + chalk.white('ENV:      ') + chalk.green.bold(TARGET));
   console.log(chalk.yellow('➜') + ' ' + chalk.white('PLATFORM: ') + chalk.green.bold(PLATFORM));
   console.log('');
   //-- -- --env.target development
@@ -43,7 +43,7 @@ module.exports = function (envArguments) {
     version: pkg.version,
     author: pkg.author,
     baseUrl: baseUrl,
-    target: TARGET,
+    env: TARGET,
     platform: PLATFORM,
     root: rootDir
   };
@@ -108,7 +108,7 @@ module.exports = function (envArguments) {
   };
 
   const configEnvironment = {
-    env: ENV,
+    target: TARGET,
     name: pkg.name,
     version: pkg.version
   };
