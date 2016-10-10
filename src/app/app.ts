@@ -12,7 +12,7 @@ export class App {
   ) { }
 
   public configureRouter(config: RouterConfiguration, router: Router): void {
-    config.title = this.i18n.tr('TITLE');
+    config.title = 'Aurelia'; //this.i18n.tr('TITLE');
     if (this.appConfig.PLATFORM === 'web') {
       config.options.pushState = true;
     }

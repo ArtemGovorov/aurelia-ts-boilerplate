@@ -10,16 +10,16 @@ const get = easyWebpack.get;
 const path = require('path');
 const chalk = require('chalk');
 
-module.exports = function (envArguments) {
+// module.exports = function (envArguments) {
   let config;
   const ENV = process.env.NODE_ENV && process.env.NODE_ENV.toLowerCase() || 'development';
   const pkg = require(path.join(process.cwd(), 'package.json'));
   let PLATFORM = 'web';
   let TARGET = 'development';
-  if (envArguments) {
-    PLATFORM = envArguments.platform || PLATFORM;
-    TARGET = envArguments.target || TARGET;
-  }
+  // if (envArguments) {
+  //   PLATFORM = envArguments.platform || PLATFORM;
+  //   TARGET = envArguments.target || TARGET;
+  // }
   console.log('');
   console.log(chalk.yellow('➜') + ' ' + chalk.white('NODE_ENV: ') + chalk.green.bold(ENV));
   console.log(chalk.yellow('➜') + ' ' + chalk.white('ENV:      ') + chalk.green.bold(TARGET));
@@ -257,5 +257,7 @@ module.exports = function (envArguments) {
       break;
   }
 
-  return config;
-};
+//   return config;
+// };
+
+module.exports = config;
